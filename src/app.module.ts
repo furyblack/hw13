@@ -1,19 +1,23 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersController } from './users/users.controller';
-import { UsersService } from './users/users.service';
-import { UsersRepository } from './users/users.repository';
+import { UserAccountsModule } from './features/user-accounts/user-accounts.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { TestingModule } from './features/testing/testing.module';
+import { BloggersPlatformModule } from './features/bloggers-platform/bloggers-platform.module';
+import { CoreModule } from './core/core.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot(
       'mongodb+srv://miha:miha2016!@cluster0.expiegq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
-    ),
-  ], //[MongooseModule.forRoot(process.env.MONGO_CONNECTION_STRING)],
-  //forRoot('mongodb://localhost/nest')],
-  controllers: [AppController, UsersController],
-  providers: [AppService, UsersService, UsersRepository],
+    ), //TODO: move to env. will be in the following lessons
+    UserAccountsModule, //все модули должны быть заимпортированы в корневой модуль, либо напрямую, либо по цепочке (через другие модули)
+    TestingModule,
+    BloggersPlatformModule,
+    CoreModule,
+  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
